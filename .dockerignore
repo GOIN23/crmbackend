@@ -1,0 +1,11 @@
+node_modules
+dist
+.git
+.vscode
+generated
+*.log
+.env
+.env.local
+.env.*.local
+coverage
+.DS_Store
