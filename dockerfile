@@ -1,25 +1,25 @@
-# Стадия 1: Установка зависимостей и сборка
-FROM node:20-alpine AS builder
-
-WORKDIR /app
-
-COPY package.json yarn.lock ./
-COPY prisma ./prisma/
-
-RUN yarn install --frozen-lockfile
-RUN npx prisma generate
-
-COPY . .
-RUN yarn build
-
-# Стадия 2: Финальный образ
+# Единый образ для сборки и запуска
 FROM node:20-alpine
 
 WORKDIR /app
 
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/prisma ./prisma
+# Копируем все файлы проекта
+COPY package.json yarn.lock ./
+COPY prisma ./prisma/
+COPY prisma.config.ts ./
+COPY . .
 
-CMD sh -c "npx prisma db push && yarn start:prod"
+# Устанавливаем ВСЕ зависимости (и dev, и production)
+RUN yarn install --frozen-lockfile
+
+# Генерируем Prisma Client
+RUN yarn prisma generate
+
+# Собираем приложение
+RUN yarn build
+
+# Указываем порт
+EXPOSE 3001
+
+# Запускаем приложение
+CMD ["sh", "-c", "yarn prisma db push --accept-data-loss --url \"postgresql://postgres:1234@db:5432/PARSING?schema=public\" && node dist/src/main"]

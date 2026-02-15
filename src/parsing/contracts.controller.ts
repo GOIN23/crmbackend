@@ -12,6 +12,7 @@ export class ContractsController {
   // Эндпоинт для получения списка отазов с пагинацией и фильтрами
   @Get('refusals')
   async getRefusals(@Query() query: GetUnilateralRefusalsDto) {
+    console.log(query);
     // await this.zakupkiService.hourlyUpdate();
     // await this.zakupkiService.testPush();
     try {
