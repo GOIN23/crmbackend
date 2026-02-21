@@ -23,8 +23,12 @@ export class ParsingConfig {
   @IsString({ message: 'Env variable TOKEN has to type of number' })
   token: string = this.configService.get('TOKEN') as string;
 
-  @IsNotEmpty({ message: 'Set env variable EMAIL_CONFIRM_URL' })
-  @IsString({ message: 'Env variable EMAIL_CONFIRM_URL has to type of string' })
+  @IsNotEmpty({ message: 'Set env variable DBURL' })
+  @IsString({ message: 'Env variable DBURL has to type of string' })
   dbUrl: string = this.configService.get('DATABASE_URL') as string;
+  @IsNotEmpty({ message: 'Set env variable REDIS' })
+  @IsString({ message: 'Env variable REDIS has to type of string' })
+  redisUrl: string = this.configService.get('REDIS_URL') as string;
+
   constructor(private configService: ConfigService) {}
 }

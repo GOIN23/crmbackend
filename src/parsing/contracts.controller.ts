@@ -13,8 +13,6 @@ export class ContractsController {
   @Get('refusals')
   async getRefusals(@Query() query: GetUnilateralRefusalsDto) {
     console.log(query);
-    // await this.zakupkiService.hourlyUpdate();
-    // await this.zakupkiService.testPush();
     try {
       const result = await this.zakupkiService.findAllPaginated(query);
       return result;
