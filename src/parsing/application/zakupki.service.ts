@@ -11,7 +11,7 @@ import * as AdmZip from 'adm-zip';
 import { randomUUID } from 'crypto';
 import { PrismaService } from 'prisma/prisma.service';
 import { GetUnilateralRefusalsDto } from './dto/get-refusals.dto';
-// import { Cron } from '@nestjs/schedule';
+import { Cron } from '@nestjs/schedule';
 import { ConfigService } from '@nestjs/config';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import type { Cache } from 'cache-manager';
@@ -45,7 +45,7 @@ export class ZakupkiUnilateralRefusalService {
     }
   }
 
-  // @Cron('0 0 */2 * * *') // Каждые 2 часа ( каждого четного часа)
+  @Cron('0 0 */2 * * *') // Каждые 2 часа ( каждого четного часа)
   async hourlyUpdate() {
     this.logger.log('Starting update every 2 hours');
     await this.fetchAndSaveAllRegions();
