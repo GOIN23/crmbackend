@@ -45,6 +45,7 @@ export type UnilateralRefusalMinAggregateOutputType = {
   publishDate: Date | null
   createdAt: Date | null
   updatedAt: Date | null
+  status: $Enums.Status | null
 }
 
 export type UnilateralRefusalMaxAggregateOutputType = {
@@ -58,6 +59,7 @@ export type UnilateralRefusalMaxAggregateOutputType = {
   publishDate: Date | null
   createdAt: Date | null
   updatedAt: Date | null
+  status: $Enums.Status | null
 }
 
 export type UnilateralRefusalCountAggregateOutputType = {
@@ -71,6 +73,7 @@ export type UnilateralRefusalCountAggregateOutputType = {
   publishDate: number
   createdAt: number
   updatedAt: number
+  status: number
   _all: number
 }
 
@@ -94,6 +97,7 @@ export type UnilateralRefusalMinAggregateInputType = {
   publishDate?: true
   createdAt?: true
   updatedAt?: true
+  status?: true
 }
 
 export type UnilateralRefusalMaxAggregateInputType = {
@@ -107,6 +111,7 @@ export type UnilateralRefusalMaxAggregateInputType = {
   publishDate?: true
   createdAt?: true
   updatedAt?: true
+  status?: true
 }
 
 export type UnilateralRefusalCountAggregateInputType = {
@@ -120,6 +125,7 @@ export type UnilateralRefusalCountAggregateInputType = {
   publishDate?: true
   createdAt?: true
   updatedAt?: true
+  status?: true
   _all?: true
 }
 
@@ -220,6 +226,7 @@ export type UnilateralRefusalGroupByOutputType = {
   publishDate: Date | null
   createdAt: Date
   updatedAt: Date
+  status: $Enums.Status | null
   _count: UnilateralRefusalCountAggregateOutputType | null
   _avg: UnilateralRefusalAvgAggregateOutputType | null
   _sum: UnilateralRefusalSumAggregateOutputType | null
@@ -256,7 +263,9 @@ export type UnilateralRefusalWhereInput = {
   publishDate?: Prisma.DateTimeNullableFilter<"UnilateralRefusal"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"UnilateralRefusal"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UnilateralRefusal"> | Date | string
+  status?: Prisma.EnumStatusNullableFilter<"UnilateralRefusal"> | $Enums.Status | null
   attachments?: Prisma.AttachmentListRelationFilter
+  comment?: Prisma.CommentListRelationFilter
 }
 
 export type UnilateralRefusalOrderByWithRelationInput = {
@@ -270,16 +279,18 @@ export type UnilateralRefusalOrderByWithRelationInput = {
   publishDate?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  status?: Prisma.SortOrderInput | Prisma.SortOrder
   attachments?: Prisma.AttachmentOrderByRelationAggregateInput
+  comment?: Prisma.CommentOrderByRelationAggregateInput
 }
 
 export type UnilateralRefusalWhereUniqueInput = Prisma.AtLeast<{
   id?: number
+  regNumber?: string
   regNumber_region?: Prisma.UnilateralRefusalRegNumberRegionCompoundUniqueInput
   AND?: Prisma.UnilateralRefusalWhereInput | Prisma.UnilateralRefusalWhereInput[]
   OR?: Prisma.UnilateralRefusalWhereInput[]
   NOT?: Prisma.UnilateralRefusalWhereInput | Prisma.UnilateralRefusalWhereInput[]
-  regNumber?: Prisma.StringFilter<"UnilateralRefusal"> | string
   region?: Prisma.StringFilter<"UnilateralRefusal"> | string
   inn?: Prisma.StringNullableFilter<"UnilateralRefusal"> | string | null
   fullName?: Prisma.StringNullableFilter<"UnilateralRefusal"> | string | null
@@ -288,8 +299,10 @@ export type UnilateralRefusalWhereUniqueInput = Prisma.AtLeast<{
   publishDate?: Prisma.DateTimeNullableFilter<"UnilateralRefusal"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"UnilateralRefusal"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"UnilateralRefusal"> | Date | string
+  status?: Prisma.EnumStatusNullableFilter<"UnilateralRefusal"> | $Enums.Status | null
   attachments?: Prisma.AttachmentListRelationFilter
-}, "id" | "regNumber_region">
+  comment?: Prisma.CommentListRelationFilter
+}, "id" | "regNumber" | "regNumber_region">
 
 export type UnilateralRefusalOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -302,6 +315,7 @@ export type UnilateralRefusalOrderByWithAggregationInput = {
   publishDate?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  status?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UnilateralRefusalCountOrderByAggregateInput
   _avg?: Prisma.UnilateralRefusalAvgOrderByAggregateInput
   _max?: Prisma.UnilateralRefusalMaxOrderByAggregateInput
@@ -323,6 +337,7 @@ export type UnilateralRefusalScalarWhereWithAggregatesInput = {
   publishDate?: Prisma.DateTimeNullableWithAggregatesFilter<"UnilateralRefusal"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"UnilateralRefusal"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"UnilateralRefusal"> | Date | string
+  status?: Prisma.EnumStatusNullableWithAggregatesFilter<"UnilateralRefusal"> | $Enums.Status | null
 }
 
 export type UnilateralRefusalCreateInput = {
@@ -335,7 +350,9 @@ export type UnilateralRefusalCreateInput = {
   publishDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: $Enums.Status | null
   attachments?: Prisma.AttachmentCreateNestedManyWithoutRefusalInput
+  comment?: Prisma.CommentCreateNestedManyWithoutRefusalInput
 }
 
 export type UnilateralRefusalUncheckedCreateInput = {
@@ -349,7 +366,9 @@ export type UnilateralRefusalUncheckedCreateInput = {
   publishDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: $Enums.Status | null
   attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutRefusalInput
+  comment?: Prisma.CommentUncheckedCreateNestedManyWithoutRefusalInput
 }
 
 export type UnilateralRefusalUpdateInput = {
@@ -362,7 +381,9 @@ export type UnilateralRefusalUpdateInput = {
   publishDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.NullableEnumStatusFieldUpdateOperationsInput | $Enums.Status | null
   attachments?: Prisma.AttachmentUpdateManyWithoutRefusalNestedInput
+  comment?: Prisma.CommentUpdateManyWithoutRefusalNestedInput
 }
 
 export type UnilateralRefusalUncheckedUpdateInput = {
@@ -376,7 +397,9 @@ export type UnilateralRefusalUncheckedUpdateInput = {
   publishDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.NullableEnumStatusFieldUpdateOperationsInput | $Enums.Status | null
   attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutRefusalNestedInput
+  comment?: Prisma.CommentUncheckedUpdateManyWithoutRefusalNestedInput
 }
 
 export type UnilateralRefusalCreateManyInput = {
@@ -390,6 +413,7 @@ export type UnilateralRefusalCreateManyInput = {
   publishDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: $Enums.Status | null
 }
 
 export type UnilateralRefusalUpdateManyMutationInput = {
@@ -402,6 +426,7 @@ export type UnilateralRefusalUpdateManyMutationInput = {
   publishDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.NullableEnumStatusFieldUpdateOperationsInput | $Enums.Status | null
 }
 
 export type UnilateralRefusalUncheckedUpdateManyInput = {
@@ -415,6 +440,7 @@ export type UnilateralRefusalUncheckedUpdateManyInput = {
   publishDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.NullableEnumStatusFieldUpdateOperationsInput | $Enums.Status | null
 }
 
 export type UnilateralRefusalRegNumberRegionCompoundUniqueInput = {
@@ -433,6 +459,7 @@ export type UnilateralRefusalCountOrderByAggregateInput = {
   publishDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  status?: Prisma.SortOrder
 }
 
 export type UnilateralRefusalAvgOrderByAggregateInput = {
@@ -450,6 +477,7 @@ export type UnilateralRefusalMaxOrderByAggregateInput = {
   publishDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  status?: Prisma.SortOrder
 }
 
 export type UnilateralRefusalMinOrderByAggregateInput = {
@@ -463,6 +491,7 @@ export type UnilateralRefusalMinOrderByAggregateInput = {
   publishDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  status?: Prisma.SortOrder
 }
 
 export type UnilateralRefusalSumOrderByAggregateInput = {
@@ -490,6 +519,10 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
+export type NullableEnumStatusFieldUpdateOperationsInput = {
+  set?: $Enums.Status | null
+}
+
 export type IntFieldUpdateOperationsInput = {
   set?: number
   increment?: number
@@ -512,6 +545,20 @@ export type UnilateralRefusalUpdateOneRequiredWithoutAttachmentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UnilateralRefusalUpdateToOneWithWhereWithoutAttachmentsInput, Prisma.UnilateralRefusalUpdateWithoutAttachmentsInput>, Prisma.UnilateralRefusalUncheckedUpdateWithoutAttachmentsInput>
 }
 
+export type UnilateralRefusalCreateNestedOneWithoutCommentInput = {
+  create?: Prisma.XOR<Prisma.UnilateralRefusalCreateWithoutCommentInput, Prisma.UnilateralRefusalUncheckedCreateWithoutCommentInput>
+  connectOrCreate?: Prisma.UnilateralRefusalCreateOrConnectWithoutCommentInput
+  connect?: Prisma.UnilateralRefusalWhereUniqueInput
+}
+
+export type UnilateralRefusalUpdateOneRequiredWithoutCommentNestedInput = {
+  create?: Prisma.XOR<Prisma.UnilateralRefusalCreateWithoutCommentInput, Prisma.UnilateralRefusalUncheckedCreateWithoutCommentInput>
+  connectOrCreate?: Prisma.UnilateralRefusalCreateOrConnectWithoutCommentInput
+  upsert?: Prisma.UnilateralRefusalUpsertWithoutCommentInput
+  connect?: Prisma.UnilateralRefusalWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UnilateralRefusalUpdateToOneWithWhereWithoutCommentInput, Prisma.UnilateralRefusalUpdateWithoutCommentInput>, Prisma.UnilateralRefusalUncheckedUpdateWithoutCommentInput>
+}
+
 export type UnilateralRefusalCreateWithoutAttachmentsInput = {
   regNumber: string
   region: string
@@ -522,6 +569,8 @@ export type UnilateralRefusalCreateWithoutAttachmentsInput = {
   publishDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: $Enums.Status | null
+  comment?: Prisma.CommentCreateNestedManyWithoutRefusalInput
 }
 
 export type UnilateralRefusalUncheckedCreateWithoutAttachmentsInput = {
@@ -535,6 +584,8 @@ export type UnilateralRefusalUncheckedCreateWithoutAttachmentsInput = {
   publishDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: $Enums.Status | null
+  comment?: Prisma.CommentUncheckedCreateNestedManyWithoutRefusalInput
 }
 
 export type UnilateralRefusalCreateOrConnectWithoutAttachmentsInput = {
@@ -563,6 +614,8 @@ export type UnilateralRefusalUpdateWithoutAttachmentsInput = {
   publishDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.NullableEnumStatusFieldUpdateOperationsInput | $Enums.Status | null
+  comment?: Prisma.CommentUpdateManyWithoutRefusalNestedInput
 }
 
 export type UnilateralRefusalUncheckedUpdateWithoutAttachmentsInput = {
@@ -576,6 +629,82 @@ export type UnilateralRefusalUncheckedUpdateWithoutAttachmentsInput = {
   publishDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.NullableEnumStatusFieldUpdateOperationsInput | $Enums.Status | null
+  comment?: Prisma.CommentUncheckedUpdateManyWithoutRefusalNestedInput
+}
+
+export type UnilateralRefusalCreateWithoutCommentInput = {
+  regNumber: string
+  region: string
+  inn?: string | null
+  fullName?: string | null
+  dataParsing?: string | null
+  signDate?: Date | string | null
+  publishDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  status?: $Enums.Status | null
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutRefusalInput
+}
+
+export type UnilateralRefusalUncheckedCreateWithoutCommentInput = {
+  id?: number
+  regNumber: string
+  region: string
+  inn?: string | null
+  fullName?: string | null
+  dataParsing?: string | null
+  signDate?: Date | string | null
+  publishDate?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  status?: $Enums.Status | null
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutRefusalInput
+}
+
+export type UnilateralRefusalCreateOrConnectWithoutCommentInput = {
+  where: Prisma.UnilateralRefusalWhereUniqueInput
+  create: Prisma.XOR<Prisma.UnilateralRefusalCreateWithoutCommentInput, Prisma.UnilateralRefusalUncheckedCreateWithoutCommentInput>
+}
+
+export type UnilateralRefusalUpsertWithoutCommentInput = {
+  update: Prisma.XOR<Prisma.UnilateralRefusalUpdateWithoutCommentInput, Prisma.UnilateralRefusalUncheckedUpdateWithoutCommentInput>
+  create: Prisma.XOR<Prisma.UnilateralRefusalCreateWithoutCommentInput, Prisma.UnilateralRefusalUncheckedCreateWithoutCommentInput>
+  where?: Prisma.UnilateralRefusalWhereInput
+}
+
+export type UnilateralRefusalUpdateToOneWithWhereWithoutCommentInput = {
+  where?: Prisma.UnilateralRefusalWhereInput
+  data: Prisma.XOR<Prisma.UnilateralRefusalUpdateWithoutCommentInput, Prisma.UnilateralRefusalUncheckedUpdateWithoutCommentInput>
+}
+
+export type UnilateralRefusalUpdateWithoutCommentInput = {
+  regNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  region?: Prisma.StringFieldUpdateOperationsInput | string
+  inn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataParsing?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  signDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.NullableEnumStatusFieldUpdateOperationsInput | $Enums.Status | null
+  attachments?: Prisma.AttachmentUpdateManyWithoutRefusalNestedInput
+}
+
+export type UnilateralRefusalUncheckedUpdateWithoutCommentInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  regNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  region?: Prisma.StringFieldUpdateOperationsInput | string
+  inn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dataParsing?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  signDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.NullableEnumStatusFieldUpdateOperationsInput | $Enums.Status | null
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutRefusalNestedInput
 }
 
 
@@ -585,10 +714,12 @@ export type UnilateralRefusalUncheckedUpdateWithoutAttachmentsInput = {
 
 export type UnilateralRefusalCountOutputType = {
   attachments: number
+  comment: number
 }
 
 export type UnilateralRefusalCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   attachments?: boolean | UnilateralRefusalCountOutputTypeCountAttachmentsArgs
+  comment?: boolean | UnilateralRefusalCountOutputTypeCountCommentArgs
 }
 
 /**
@@ -608,6 +739,13 @@ export type UnilateralRefusalCountOutputTypeCountAttachmentsArgs<ExtArgs extends
   where?: Prisma.AttachmentWhereInput
 }
 
+/**
+ * UnilateralRefusalCountOutputType without action
+ */
+export type UnilateralRefusalCountOutputTypeCountCommentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CommentWhereInput
+}
+
 
 export type UnilateralRefusalSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -620,7 +758,9 @@ export type UnilateralRefusalSelect<ExtArgs extends runtime.Types.Extensions.Int
   publishDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  status?: boolean
   attachments?: boolean | Prisma.UnilateralRefusal$attachmentsArgs<ExtArgs>
+  comment?: boolean | Prisma.UnilateralRefusal$commentArgs<ExtArgs>
   _count?: boolean | Prisma.UnilateralRefusalCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["unilateralRefusal"]>
 
@@ -635,6 +775,7 @@ export type UnilateralRefusalSelectCreateManyAndReturn<ExtArgs extends runtime.T
   publishDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  status?: boolean
 }, ExtArgs["result"]["unilateralRefusal"]>
 
 export type UnilateralRefusalSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -648,6 +789,7 @@ export type UnilateralRefusalSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   publishDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  status?: boolean
 }, ExtArgs["result"]["unilateralRefusal"]>
 
 export type UnilateralRefusalSelectScalar = {
@@ -661,11 +803,13 @@ export type UnilateralRefusalSelectScalar = {
   publishDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  status?: boolean
 }
 
-export type UnilateralRefusalOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "regNumber" | "region" | "inn" | "fullName" | "dataParsing" | "signDate" | "publishDate" | "createdAt" | "updatedAt", ExtArgs["result"]["unilateralRefusal"]>
+export type UnilateralRefusalOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "regNumber" | "region" | "inn" | "fullName" | "dataParsing" | "signDate" | "publishDate" | "createdAt" | "updatedAt" | "status", ExtArgs["result"]["unilateralRefusal"]>
 export type UnilateralRefusalInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   attachments?: boolean | Prisma.UnilateralRefusal$attachmentsArgs<ExtArgs>
+  comment?: boolean | Prisma.UnilateralRefusal$commentArgs<ExtArgs>
   _count?: boolean | Prisma.UnilateralRefusalCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UnilateralRefusalIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -675,6 +819,7 @@ export type $UnilateralRefusalPayload<ExtArgs extends runtime.Types.Extensions.I
   name: "UnilateralRefusal"
   objects: {
     attachments: Prisma.$AttachmentPayload<ExtArgs>[]
+    comment: Prisma.$CommentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -687,6 +832,7 @@ export type $UnilateralRefusalPayload<ExtArgs extends runtime.Types.Extensions.I
     publishDate: Date | null
     createdAt: Date
     updatedAt: Date
+    status: $Enums.Status | null
   }, ExtArgs["result"]["unilateralRefusal"]>
   composites: {}
 }
@@ -1082,6 +1228,7 @@ readonly fields: UnilateralRefusalFieldRefs;
 export interface Prisma__UnilateralRefusalClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   attachments<T extends Prisma.UnilateralRefusal$attachmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UnilateralRefusal$attachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  comment<T extends Prisma.UnilateralRefusal$commentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UnilateralRefusal$commentArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1121,6 +1268,7 @@ export interface UnilateralRefusalFieldRefs {
   readonly publishDate: Prisma.FieldRef<"UnilateralRefusal", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"UnilateralRefusal", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"UnilateralRefusal", 'DateTime'>
+  readonly status: Prisma.FieldRef<"UnilateralRefusal", 'Status'>
 }
     
 
@@ -1530,6 +1678,30 @@ export type UnilateralRefusal$attachmentsArgs<ExtArgs extends runtime.Types.Exte
   take?: number
   skip?: number
   distinct?: Prisma.AttachmentScalarFieldEnum | Prisma.AttachmentScalarFieldEnum[]
+}
+
+/**
+ * UnilateralRefusal.comment
+ */
+export type UnilateralRefusal$commentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Comment
+   */
+  select?: Prisma.CommentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Comment
+   */
+  omit?: Prisma.CommentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CommentInclude<ExtArgs> | null
+  where?: Prisma.CommentWhereInput
+  orderBy?: Prisma.CommentOrderByWithRelationInput | Prisma.CommentOrderByWithRelationInput[]
+  cursor?: Prisma.CommentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CommentScalarFieldEnum | Prisma.CommentScalarFieldEnum[]
 }
 
 /**

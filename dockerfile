@@ -21,5 +21,7 @@ RUN yarn build
 # Указываем порт
 EXPOSE 3001
 
-# Запускаем приложение
-CMD ["sh", "-c", "yarn prisma db push --accept-data-loss --url \"postgresql://postgres:1234@db:5432/PARSING?schema=public\" && node dist/src/main"]
+# # Запускаем приложение
+# CMD ["sh", "-c", "yarn prisma db push --accept-data-loss --url \"postgresql://postgres:1234@db:5432/PARSING?schema=public\" && node dist/src/main"]
+##это если бд будет запущен на сервере 
+CMD ["sh", "-c", "yarn prisma db push --accept-data-loss && node dist/src/main"]

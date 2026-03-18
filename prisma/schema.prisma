@@ -14,20 +14,21 @@ datasource db {
 }
 
 model UnilateralRefusal {
-  id            Int     @id @default(autoincrement())
-  regNumber     String
-  region        String 
-  inn           String?
-  fullName      String?
-  dataParsing   String?
+  id          Int     @id @default(autoincrement())
+  regNumber   String  @unique
+  region      String
+  inn         String?
+  fullName    String?
+  dataParsing String?
 
   signDate    DateTime?
   publishDate DateTime?
-  createdAt   DateTime  @default(now()) 
+  createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  status      Status?   @default(NEW)
 
-  attachments   Attachment[]
-
+  attachments Attachment[]
+  comment     Comment[]
 
   @@unique([regNumber, region])
   @@index([inn])
@@ -35,13 +36,58 @@ model UnilateralRefusal {
   @@map("unilateral_refusals")
 }
 
+enum Status {
+  NEW         @map("Новый")
+  MISSED_CALL @map("Недозвон")
+  NEGOTIATION @map("Переговоры")
+  REJECTED    @map("Отказ")
+}
 
 model Attachment {
-  id         Int                @id @default(autoincrement())
-  refusalId  Int
-  fileName   String?            // Название файла
-  url        String?            // Ссылка для скачивания
-  refusal    UnilateralRefusal  @relation(fields: [refusalId], references: [id], onDelete: Cascade)
-  
+  id        Int               @id @default(autoincrement())
+  refusalId Int
+  fileName  String? // Название файла
+  url       String? // Ссылка для скачивания
+  refusal   UnilateralRefusal @relation(fields: [refusalId], references: [id], onDelete: Cascade)
+
   @@map("attachments")
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  refusalId Int      
+  text      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  refusal UnilateralRefusal @relation(fields: [refusalId], references: [id], onDelete: Cascade)
+
+  @@map("comments")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  userName     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  sessions Session[] @relation("UserSessions")
+
+  @@map("users")
+}
+
+model Session {
+  id         Int      @id @default(autoincrement())
+  deviceId   String
+  ip         String
+  deviceName String
+  issuedAt   DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  userId     Int
+  timezone   String?
+  user       User     @relation(fields: [userId], references: [id], name: "UserSessions")
+
+  @@map("session")
 }

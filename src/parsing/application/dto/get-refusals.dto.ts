@@ -12,7 +12,6 @@ export class GetUnilateralRefusalsDto {
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  @Min(100) // лимит разумный
   perPage?: number = 30;
 
   @IsOptional()

@@ -10,6 +10,8 @@ import { CacheModule } from '@nestjs/cache-manager';
 import KeyvRedis from '@keyv/redis';
 import { Keyv } from 'keyv';
 import { CacheableMemory } from 'cacheable';
+import { AuthModule } from './auth/auth.module';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -77,6 +79,14 @@ import { CacheableMemory } from 'cacheable';
         };
       },
     }),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 10000,
+        limit: 5,
+      },
+    ]),
+
+    AuthModule,
   ],
   controllers: [AppController, ContractsController],
   providers: [AppService, ZakupkiUnilateralRefusalService, PrismaService],

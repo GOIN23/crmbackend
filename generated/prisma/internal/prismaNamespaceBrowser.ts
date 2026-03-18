@@ -52,7 +52,10 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   UnilateralRefusal: 'UnilateralRefusal',
-  Attachment: 'Attachment'
+  Attachment: 'Attachment',
+  Comment: 'Comment',
+  User: 'User',
+  Session: 'Session'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -81,7 +84,8 @@ export const UnilateralRefusalScalarFieldEnum = {
   signDate: 'signDate',
   publishDate: 'publishDate',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  status: 'status'
 } as const
 
 export type UnilateralRefusalScalarFieldEnum = (typeof UnilateralRefusalScalarFieldEnum)[keyof typeof UnilateralRefusalScalarFieldEnum]
@@ -95,6 +99,43 @@ export const AttachmentScalarFieldEnum = {
 } as const
 
 export type AttachmentScalarFieldEnum = (typeof AttachmentScalarFieldEnum)[keyof typeof AttachmentScalarFieldEnum]
+
+
+export const CommentScalarFieldEnum = {
+  id: 'id',
+  refusalId: 'refusalId',
+  text: 'text',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CommentScalarFieldEnum = (typeof CommentScalarFieldEnum)[keyof typeof CommentScalarFieldEnum]
+
+
+export const UserScalarFieldEnum = {
+  id: 'id',
+  userName: 'userName',
+  passwordHash: 'passwordHash',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const SessionScalarFieldEnum = {
+  id: 'id',
+  deviceId: 'deviceId',
+  ip: 'ip',
+  deviceName: 'deviceName',
+  issuedAt: 'issuedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId',
+  timezone: 'timezone'
+} as const
+
+export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
 
 
 export const SortOrder = {

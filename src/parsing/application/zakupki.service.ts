@@ -1,216 +1,27 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import axios from 'axios';
 import * as xml2js from 'xml2js';
 import * as AdmZip from 'adm-zip';
 import { randomUUID } from 'crypto';
 import { PrismaService } from 'prisma/prisma.service';
 import { GetUnilateralRefusalsDto } from './dto/get-refusals.dto';
-import { Cron } from '@nestjs/schedule';
+// import { Cron } from '@nestjs/schedule';
 import { ConfigService } from '@nestjs/config';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import type { Cache } from 'cache-manager';
-
-export type AttachmentData = {
-  fileName: string;
-  url: string;
-};
-
-interface UnilateralRefusalData {
-  regNumber: string;
-  inn: string;
-  fullName: string;
-  region: string;
-  signDate: string | null;
-  publishDate: string | null;
-  dataParsing: string;
-  attachments: AttachmentData[];
-}
-
-const REGIONS = [
-  '01',
-  '02',
-  '03',
-  '04',
-  '05',
-  '06',
-  '07',
-  '08',
-  '09',
-  '10',
-  '11',
-  '12',
-  '13',
-  '14',
-  '15',
-  '16',
-  '17',
-  '18',
-  '19',
-  '20',
-  '21',
-  '22',
-  '23',
-  '24',
-  '25',
-  '26',
-  '27',
-  '28',
-  '29',
-  '30',
-  '31',
-  '32',
-  '33',
-  '34',
-  '35',
-  '36',
-  '37',
-  '38',
-  '39',
-  '40',
-  '41',
-  '42',
-  '43',
-  '44',
-  '45',
-  '46',
-  '47',
-  '48',
-  '49',
-  '50',
-  '51',
-  '52',
-  '53',
-  '54',
-  '55',
-  '56',
-  '57',
-  '58',
-  '59',
-  '60',
-  '61',
-  '62',
-  '63',
-  '64',
-  '65',
-  '66',
-  '67',
-  '68',
-  '69',
-  '70',
-  '71',
-  '72',
-  '73',
-  '74',
-  '75',
-  '76',
-  '77',
-  '78',
-  '79',
-  '83',
-  '86',
-  '87',
-  '89',
-  '90',
-  '91',
-  '92',
-  '93',
-  '94',
-  '95',
-  '99',
-];
-
-const REGION_TIMEZONES: { [key: string]: string } = {
-  '01': '+3', // Adygea
-  '02': '+5', // Bashkortostan
-  '03': '+8', // Buryatia
-  '04': '+7', // Altai Republic
-  '05': '+3', // Dagestan
-  '06': '+3', // Ingushetia
-  '07': '+3', // Kabardino-Balkaria
-  '08': '+3', // Kalmykia
-  '09': '+3', // Karachay-Cherkessia
-  '10': '+3', // Karelia
-  '11': '+3', // Komi
-  '12': '+3', // Mari El
-  '13': '+3', // Mordovia
-  '14': '+9', // Sakha (Yakutia) - main timezone, though spans multiple
-  '15': '+3', // North Ossetia–Alania
-  '16': '+3', // Tatarstan
-  '17': '+7', // Tuva
-  '18': '+4', // Udmurtia
-  '19': '+7', // Khakassia
-  '20': '+3', // Chechnya
-  '21': '+3', // Chuvashia
-  '22': '+7', // Altai Krai
-  '23': '+3', // Krasnodar Krai
-  '24': '+7', // Krasnoyarsk Krai
-  '25': '+10', // Primorsky Krai
-  '26': '+3', // Stavropol Krai
-  '27': '+10', // Khabarovsk Krai
-  '28': '+9', // Amur Oblast
-  '29': '+3', // Arkhangelsk Oblast
-  '30': '+4', // Astrakhan Oblast
-  '31': '+3', // Belgorod Oblast
-  '32': '+3', // Bryansk Oblast
-  '33': '+3', // Vladimir Oblast
-  '34': '+3', // Volgograd Oblast
-  '35': '+3', // Vologda Oblast
-  '36': '+3', // Voronezh Oblast
-  '37': '+3', // Ivanovo Oblast
-  '38': '+8', // Irkutsk Oblast
-  '39': '+2', // Kaliningrad Oblast
-  '40': '+3', // Kaluga Oblast
-  '41': '+12', // Kamchatka Krai
-  '42': '+7', // Kemerovo Oblast
-  '43': '+3', // Kirov Oblast
-  '44': '+3', // Kostroma Oblast
-  '45': '+5', // Kurgan Oblast
-  '46': '+3', // Kursk Oblast
-  '47': '+3', // Leningrad Oblast
-  '48': '+3', // Lipetsk Oblast
-  '49': '+11', // Magadan Oblast
-  '50': '+3', // Moscow Oblast
-  '51': '+3', // Murmansk Oblast
-  '52': '+3', // Nizhny Novgorod Oblast
-  '53': '+3', // Novgorod Oblast
-  '54': '+7', // Novosibirsk Oblast
-  '55': '+6', // Omsk Oblast
-  '56': '+5', // Orenburg Oblast
-  '57': '+3', // Oryol Oblast
-  '58': '+3', // Penza Oblast
-  '59': '+5', // Perm Krai
-  '60': '+3', // Pskov Oblast
-  '61': '+3', // Rostov Oblast
-  '62': '+3', // Ryazan Oblast
-  '63': '+4', // Samara Oblast
-  '64': '+4', // Saratov Oblast
-  '65': '+11', // Sakhalin Oblast
-  '66': '+5', // Sverdlovsk Oblast
-  '67': '+3', // Smolensk Oblast
-  '68': '+3', // Tambov Oblast
-  '69': '+3', // Tver Oblast
-  '70': '+7', // Tomsk Oblast
-  '71': '+3', // Tula Oblast
-  '72': '+5', // Tyumen Oblast
-  '73': '+4', // Ulyanovsk Oblast
-  '74': '+5', // Chelyabinsk Oblast
-  '75': '+9', // Zabaykalsky Krai
-  '76': '+3', // Yaroslavl Oblast
-  '77': '+3', // Moscow
-  '78': '+3', // Saint Petersburg
-  '79': '+10', // Jewish Autonomous Oblast
-  '83': '+3', // Nenets Autonomous Okrug
-  '86': '+5', // Khanty-Mansi Autonomous Okrug
-  '87': '+12', // Chukotka Autonomous Okrug
-  '89': '+5', // Yamalo-Nenets Autonomous Okrug
-  '90': '+3', // Default for unknown/special
-  '91': '+3', // Crimea
-  '92': '+3', // Sevastopol
-  '93': '+3', // Default
-  '94': '+3', // Default
-  '95': '+3', // Default
-  '99': '+3', // Baikonur
-};
+import {
+  REGION_NAMES,
+  REGION_TIMEZONES,
+  STATUS,
+} from '../utils/region-constants';
+import { UnilateralRefusalData } from '../utils/type/zakup.type';
+import { Status } from 'generated/prisma/enums';
 
 @Injectable()
 export class ZakupkiUnilateralRefusalService {
@@ -226,21 +37,75 @@ export class ZakupkiUnilateralRefusalService {
   ) {
     this.token = configService.get('TOKEN');
   }
+  private async invalidateAllRefusalsCache() {
+    try {
+      await this.cacheManager.clear();
+    } catch (error) {
+      this.logger.error(`Ошибка при инвалидации кэша: ${error.message}`);
+    }
+  }
 
-  @Cron('0 0 */2 * * *') // Каждые 2 часа ( каждого четного часа)
+  // @Cron('0 0 */2 * * *') // Каждые 2 часа ( каждого четного часа)
   async hourlyUpdate() {
     this.logger.log('Starting update every 2 hours');
     await this.fetchAndSaveAllRegions();
+    await this.invalidateAllRefusalsCache();
     this.logger.log('Update completed');
+  }
+
+  async changeStatus(regNumber: string, status: string) {
+    const statusMap = {
+      Новый: Status.NEW,
+      Недозвон: Status.MISSED_CALL,
+      Переговоры: Status.NEGOTIATION,
+      Отказ: Status.REJECTED,
+    };
+
+    const newStatus = statusMap[status];
+
+    if (!newStatus) {
+      throw new BadRequestException(`Недопустимый статус: ${status}`);
+    }
+
+    await this.invalidateAllRefusalsCache();
+    return this.prisma.unilateralRefusal.update({
+      where: { regNumber: regNumber },
+      data: { status: newStatus },
+      select: { id: true, regNumber: true, status: true },
+    });
+  }
+
+  async createComment(regNumber: string, text: string) {
+    const refusal = await this.prisma.unilateralRefusal.findUnique({
+      where: {
+        regNumber: regNumber,
+      },
+      select: { id: true },
+    });
+
+    if (!refusal) {
+      throw new NotFoundException(`Отказ ${regNumber} не найден`);
+    }
+
+    const comment = await this.prisma.comment.create({
+      data: {
+        refusalId: refusal.id,
+        text,
+      },
+    });
+
+    await this.invalidateAllRefusalsCache();
+
+    return comment;
   }
 
   async fetchAndSaveAllRegions() {
     const now = new Date();
-    // const today = now.toISOString().split('T')[0];
+    const today = now.toISOString().split('T')[0];
     const currentHour = now.getHours();
     const saved: UnilateralRefusalData[] = [];
 
-    for (const region of REGIONS) {
+    for (const region of Object.keys(REGION_NAMES)) {
       const offset = REGION_TIMEZONES[region] || '+3';
       this.logger.log(`Processing region ${region} with offset ${offset}`);
 
@@ -248,7 +113,7 @@ export class ZakupkiUnilateralRefusalService {
       // Начнем с currentHour - 5 до currentHour - 3 (чтобы безопасно >2 часа лаг)
       for (let delta = 5; delta >= 3; delta--) {
         let fromHour = currentHour - delta;
-        let queryDate = '2026-02-13';
+        let queryDate = today;
 
         // Если fromHour <0, корректруем дату и час
         if (fromHour < 0) {
@@ -285,7 +150,7 @@ export class ZakupkiUnilateralRefusalService {
               },
               create: {
                 regNumber: item.regNumber,
-                region: item.region,
+                region: REGION_NAMES[item.region],
                 inn: item.inn,
                 fullName: item.fullName,
                 signDate: item.signDate ? new Date(item.signDate) : null,
@@ -599,7 +464,7 @@ export class ZakupkiUnilateralRefusalService {
   async testPush() {
     const testItem = {
       regNumber: '2171602115425000009',
-      region: '44',
+      region: 'Удмуртская Республика',
       inn: '12343467890',
       fullName: 'Алишка Аллахвердиев',
       signDate: new Date(),
@@ -699,6 +564,7 @@ export class ZakupkiUnilateralRefusalService {
           signDate: true,
           publishDate: true,
           dataParsing: true,
+          status: true,
           attachments: {
             select: {
               fileName: true,
@@ -708,13 +574,27 @@ export class ZakupkiUnilateralRefusalService {
               id: 'asc',
             },
           },
+          comment: {
+            select: {
+              id: true,
+              text: true,
+              createdAt: true,
+            },
+            orderBy: {
+              createdAt: 'desc',
+            },
+          },
         },
       }),
       this.prisma.unilateralRefusal.count({ where }),
     ]);
 
     const result: any = {
-      data: items,
+      data: items.map((el) => ({
+        ...el,
+        status: STATUS[el.status] || el.status, // преобразуем статус
+      })),
+
       meta: {
         total,
         page: Number(page),

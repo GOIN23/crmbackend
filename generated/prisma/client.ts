@@ -47,3 +47,18 @@ export type UnilateralRefusal = Prisma.UnilateralRefusalModel
  * 
  */
 export type Attachment = Prisma.AttachmentModel
+/**
+ * Model Comment
+ * 
+ */
+export type Comment = Prisma.CommentModel
+/**
+ * Model User
+ * 
+ */
+export type User = Prisma.UserModel
+/**
+ * Model Session
+ * 
+ */
+export type Session = Prisma.SessionModel

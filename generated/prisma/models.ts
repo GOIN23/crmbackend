@@ -10,4 +10,7 @@
  */
 export type * from './models/UnilateralRefusal'
 export type * from './models/Attachment'
+export type * from './models/Comment'
+export type * from './models/User'
+export type * from './models/Session'
 export type * from './commonInputTypes'
