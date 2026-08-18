@@ -9,7 +9,6 @@ config();
 export class PrismaService extends PrismaClient {
   constructor(protected configService: ConfigService) {
     const dburl = configService.get('DATABASE_URL');
-    console.log(dburl, 'dfsdfsdfsdfsdfsds');
     const adapter = new PrismaPg({
       connectionString: dburl as string,
     });
