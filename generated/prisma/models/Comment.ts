@@ -40,6 +40,7 @@ export type CommentMinAggregateOutputType = {
   id: number | null
   refusalId: number | null
   text: string | null
+  author: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -48,6 +49,7 @@ export type CommentMaxAggregateOutputType = {
   id: number | null
   refusalId: number | null
   text: string | null
+  author: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -56,6 +58,7 @@ export type CommentCountAggregateOutputType = {
   id: number
   refusalId: number
   text: number
+  author: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -76,6 +79,7 @@ export type CommentMinAggregateInputType = {
   id?: true
   refusalId?: true
   text?: true
+  author?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -84,6 +88,7 @@ export type CommentMaxAggregateInputType = {
   id?: true
   refusalId?: true
   text?: true
+  author?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -92,6 +97,7 @@ export type CommentCountAggregateInputType = {
   id?: true
   refusalId?: true
   text?: true
+  author?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -187,6 +193,7 @@ export type CommentGroupByOutputType = {
   id: number
   refusalId: number
   text: string
+  author: string | null
   createdAt: Date
   updatedAt: Date
   _count: CommentCountAggregateOutputType | null
@@ -218,6 +225,7 @@ export type CommentWhereInput = {
   id?: Prisma.IntFilter<"Comment"> | number
   refusalId?: Prisma.IntFilter<"Comment"> | number
   text?: Prisma.StringFilter<"Comment"> | string
+  author?: Prisma.StringNullableFilter<"Comment"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Comment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Comment"> | Date | string
   refusal?: Prisma.XOR<Prisma.UnilateralRefusalScalarRelationFilter, Prisma.UnilateralRefusalWhereInput>
@@ -227,6 +235,7 @@ export type CommentOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   refusalId?: Prisma.SortOrder
   text?: Prisma.SortOrder
+  author?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   refusal?: Prisma.UnilateralRefusalOrderByWithRelationInput
@@ -239,6 +248,7 @@ export type CommentWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.CommentWhereInput | Prisma.CommentWhereInput[]
   refusalId?: Prisma.IntFilter<"Comment"> | number
   text?: Prisma.StringFilter<"Comment"> | string
+  author?: Prisma.StringNullableFilter<"Comment"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Comment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Comment"> | Date | string
   refusal?: Prisma.XOR<Prisma.UnilateralRefusalScalarRelationFilter, Prisma.UnilateralRefusalWhereInput>
@@ -248,6 +258,7 @@ export type CommentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   refusalId?: Prisma.SortOrder
   text?: Prisma.SortOrder
+  author?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.CommentCountOrderByAggregateInput
@@ -264,12 +275,14 @@ export type CommentScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"Comment"> | number
   refusalId?: Prisma.IntWithAggregatesFilter<"Comment"> | number
   text?: Prisma.StringWithAggregatesFilter<"Comment"> | string
+  author?: Prisma.StringNullableWithAggregatesFilter<"Comment"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Comment"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Comment"> | Date | string
 }
 
 export type CommentCreateInput = {
   text: string
+  author?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   refusal: Prisma.UnilateralRefusalCreateNestedOneWithoutCommentInput
@@ -279,12 +292,14 @@ export type CommentUncheckedCreateInput = {
   id?: number
   refusalId: number
   text: string
+  author?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type CommentUpdateInput = {
   text?: Prisma.StringFieldUpdateOperationsInput | string
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   refusal?: Prisma.UnilateralRefusalUpdateOneRequiredWithoutCommentNestedInput
@@ -294,6 +309,7 @@ export type CommentUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   refusalId?: Prisma.IntFieldUpdateOperationsInput | number
   text?: Prisma.StringFieldUpdateOperationsInput | string
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -302,12 +318,14 @@ export type CommentCreateManyInput = {
   id?: number
   refusalId: number
   text: string
+  author?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type CommentUpdateManyMutationInput = {
   text?: Prisma.StringFieldUpdateOperationsInput | string
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -316,6 +334,7 @@ export type CommentUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   refusalId?: Prisma.IntFieldUpdateOperationsInput | number
   text?: Prisma.StringFieldUpdateOperationsInput | string
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -334,6 +353,7 @@ export type CommentCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   refusalId?: Prisma.SortOrder
   text?: Prisma.SortOrder
+  author?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -347,6 +367,7 @@ export type CommentMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   refusalId?: Prisma.SortOrder
   text?: Prisma.SortOrder
+  author?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -355,6 +376,7 @@ export type CommentMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   refusalId?: Prisma.SortOrder
   text?: Prisma.SortOrder
+  author?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -408,6 +430,7 @@ export type CommentUncheckedUpdateManyWithoutRefusalNestedInput = {
 
 export type CommentCreateWithoutRefusalInput = {
   text: string
+  author?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -415,6 +438,7 @@ export type CommentCreateWithoutRefusalInput = {
 export type CommentUncheckedCreateWithoutRefusalInput = {
   id?: number
   text: string
+  author?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -452,6 +476,7 @@ export type CommentScalarWhereInput = {
   id?: Prisma.IntFilter<"Comment"> | number
   refusalId?: Prisma.IntFilter<"Comment"> | number
   text?: Prisma.StringFilter<"Comment"> | string
+  author?: Prisma.StringNullableFilter<"Comment"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Comment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Comment"> | Date | string
 }
@@ -459,12 +484,14 @@ export type CommentScalarWhereInput = {
 export type CommentCreateManyRefusalInput = {
   id?: number
   text: string
+  author?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type CommentUpdateWithoutRefusalInput = {
   text?: Prisma.StringFieldUpdateOperationsInput | string
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -472,6 +499,7 @@ export type CommentUpdateWithoutRefusalInput = {
 export type CommentUncheckedUpdateWithoutRefusalInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   text?: Prisma.StringFieldUpdateOperationsInput | string
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -479,6 +507,7 @@ export type CommentUncheckedUpdateWithoutRefusalInput = {
 export type CommentUncheckedUpdateManyWithoutRefusalInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   text?: Prisma.StringFieldUpdateOperationsInput | string
+  author?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -489,6 +518,7 @@ export type CommentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   id?: boolean
   refusalId?: boolean
   text?: boolean
+  author?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   refusal?: boolean | Prisma.UnilateralRefusalDefaultArgs<ExtArgs>
@@ -498,6 +528,7 @@ export type CommentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   refusalId?: boolean
   text?: boolean
+  author?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   refusal?: boolean | Prisma.UnilateralRefusalDefaultArgs<ExtArgs>
@@ -507,6 +538,7 @@ export type CommentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   refusalId?: boolean
   text?: boolean
+  author?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   refusal?: boolean | Prisma.UnilateralRefusalDefaultArgs<ExtArgs>
@@ -516,11 +548,12 @@ export type CommentSelectScalar = {
   id?: boolean
   refusalId?: boolean
   text?: boolean
+  author?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CommentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "refusalId" | "text" | "createdAt" | "updatedAt", ExtArgs["result"]["comment"]>
+export type CommentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "refusalId" | "text" | "author" | "createdAt" | "updatedAt", ExtArgs["result"]["comment"]>
 export type CommentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   refusal?: boolean | Prisma.UnilateralRefusalDefaultArgs<ExtArgs>
 }
@@ -540,6 +573,7 @@ export type $CommentPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     id: number
     refusalId: number
     text: string
+    author: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["comment"]>
@@ -969,6 +1003,7 @@ export interface CommentFieldRefs {
   readonly id: Prisma.FieldRef<"Comment", 'Int'>
   readonly refusalId: Prisma.FieldRef<"Comment", 'Int'>
   readonly text: Prisma.FieldRef<"Comment", 'String'>
+  readonly author: Prisma.FieldRef<"Comment", 'String'>
   readonly createdAt: Prisma.FieldRef<"Comment", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Comment", 'DateTime'>
 }

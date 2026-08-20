@@ -266,13 +266,21 @@ export class ZakupkiUnilateralRefusalService {
     });
   }
 
-  async createComment(regNumber: string, text: string) {
-    const refusal = await this.prisma.unilateralRefusal.findUnique({
-      where: {
-        regNumber: regNumber,
-      },
-      select: { id: true },
-    });
+  async createComment(regNumber: string, text: string, userId?: number) {
+    const [refusal, user] = await Promise.all([
+      this.prisma.unilateralRefusal.findUnique({
+        where: {
+          regNumber: regNumber,
+        },
+        select: { id: true },
+      }),
+      userId
+        ? this.prisma.user.findUnique({
+            where: { id: userId },
+            select: { userName: true },
+          })
+        : null,
+    ]);
 
     if (!refusal) {
       throw new NotFoundException(`Отказ ${regNumber} не найден`);
@@ -282,6 +290,7 @@ export class ZakupkiUnilateralRefusalService {
       data: {
         refusalId: refusal.id,
         text,
+        author: user?.userName ?? null,
       },
     });
 
@@ -859,6 +868,7 @@ export class ZakupkiUnilateralRefusalService {
             select: {
               id: true,
               text: true,
+              author: true,
               createdAt: true,
             },
             orderBy: {

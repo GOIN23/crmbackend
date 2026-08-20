@@ -13,6 +13,7 @@ import { GetUnilateralRefusalsDto } from './application/dto/get-refusals.dto';
 import { ChangeStatusDto } from './application/dto/change-status.dto';
 import { AddCommentsDto } from './application/dto/change-status.dto copy';
 import { JwtAccessAuthGuard } from 'src/auth/guards/jwt/jwt-header.strategy';
+import { TakeUserId } from 'src/auth/decorators/authMeTakeUserId.decorator';
 
 @UseGuards(JwtAccessAuthGuard)
 @Controller('contracts')
@@ -55,10 +56,14 @@ export class ContractsController {
     await this.zakupkiService.changeStatus(query.RegNumber, query.status);
   }
   @Post('comment')
-  async createComment(@Body() commentDto: AddCommentsDto) {
-    await this.zakupkiService.createComment(
+  async createComment(
+    @Body() commentDto: AddCommentsDto,
+    @TakeUserId() { userId }: { userId: number },
+  ) {
+    return this.zakupkiService.createComment(
       commentDto.RegNumber,
       commentDto.text,
+      userId,
     );
   }
 }
