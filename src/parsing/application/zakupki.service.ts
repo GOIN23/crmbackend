@@ -324,12 +324,10 @@ export class ZakupkiUnilateralRefusalService {
           for (const item of items) {
             const savedRefusal = await this.prisma.unilateralRefusal.upsert({
               where: {
-                regNumber_region: {
-                  regNumber: item.regNumber,
-                  region: item.region,
-                },
+                regNumber: item.regNumber,
               },
               update: {
+                region: REGION_NAMES[item.region],
                 inn: item.inn,
                 fullName: item.fullName,
                 ...(item.supplierPhone || item.supplierEmail
