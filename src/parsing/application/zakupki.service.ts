@@ -5,7 +5,9 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
+import * as https from 'https';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 import * as xml2js from 'xml2js';
 import * as AdmZip from 'adm-zip';
 import { randomUUID } from 'crypto';
@@ -29,6 +31,8 @@ export class ZakupkiUnilateralRefusalService {
   private readonly endpoint =
     'https://int.zakupki.gov.ru/eis-integration/services/getDocsIP';
   private token: string;
+  private readonly eisProxyUrl?: string;
+  private readonly eisRejectUnauthorized: boolean;
 
   constructor(
     private prisma: PrismaService,
@@ -36,7 +40,43 @@ export class ZakupkiUnilateralRefusalService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {
     this.token = configService.get('TOKEN');
+    this.eisProxyUrl = configService.get<string>('EIS_PROXY_URL') || undefined;
+    this.eisRejectUnauthorized =
+      configService.get<string>('EIS_TLS_REJECT_UNAUTHORIZED') !== 'false';
+
+    if (this.eisProxyUrl) {
+      const proxy = new URL(this.eisProxyUrl);
+      this.logger.log(`EIS proxy enabled: ${proxy.protocol}//${proxy.host}`);
+    }
+
+    if (!this.eisRejectUnauthorized) {
+      this.logger.warn('EIS TLS certificate verification is disabled');
+    }
   }
+
+  private getEisRequestConfig(timeout: number): AxiosRequestConfig {
+    if (this.eisProxyUrl) {
+      return {
+        timeout,
+        proxy: false,
+        httpsAgent: new HttpsProxyAgent(this.eisProxyUrl, {
+          rejectUnauthorized: this.eisRejectUnauthorized,
+        }),
+      };
+    }
+
+    if (!this.eisRejectUnauthorized) {
+      return {
+        timeout,
+        httpsAgent: new https.Agent({
+          rejectUnauthorized: false,
+        }),
+      };
+    }
+
+    return { timeout };
+  }
+
   private async invalidateAllRefusalsCache() {
     try {
       await this.cacheManager.clear();
@@ -252,7 +292,7 @@ export class ZakupkiUnilateralRefusalService {
           headers: {
             'Content-Type': 'text/xml; charset=utf-8',
           },
-          timeout: 30000,
+          ...this.getEisRequestConfig(30000),
         });
 
         // Если дошли сюда — запрос прошёл успешно
@@ -412,7 +452,7 @@ export class ZakupkiUnilateralRefusalService {
         const res = await axios.get(url, {
           headers: { individualPerson_token: this.token },
           responseType: 'arraybuffer',
-          timeout: 180000, // 3 минуты — ZIP может быть большим
+          ...this.getEisRequestConfig(180000), // 3 минуты — ZIP может быть большим
         });
 
         const buffer = Buffer.from(res.data);
