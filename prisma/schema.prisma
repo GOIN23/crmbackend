@@ -20,6 +20,9 @@ model UnilateralRefusal {
   inn         String?
   fullName    String?
   dataParsing String?
+  supplierPhone String?
+  supplierEmail String?
+  supplierContactsCheckedAt DateTime?
 
   signDate    DateTime?
   publishDate DateTime?

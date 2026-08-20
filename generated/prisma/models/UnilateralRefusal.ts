@@ -41,6 +41,9 @@ export type UnilateralRefusalMinAggregateOutputType = {
   inn: string | null
   fullName: string | null
   dataParsing: string | null
+  supplierPhone: string | null
+  supplierEmail: string | null
+  supplierContactsCheckedAt: Date | null
   signDate: Date | null
   publishDate: Date | null
   createdAt: Date | null
@@ -55,6 +58,9 @@ export type UnilateralRefusalMaxAggregateOutputType = {
   inn: string | null
   fullName: string | null
   dataParsing: string | null
+  supplierPhone: string | null
+  supplierEmail: string | null
+  supplierContactsCheckedAt: Date | null
   signDate: Date | null
   publishDate: Date | null
   createdAt: Date | null
@@ -69,6 +75,9 @@ export type UnilateralRefusalCountAggregateOutputType = {
   inn: number
   fullName: number
   dataParsing: number
+  supplierPhone: number
+  supplierEmail: number
+  supplierContactsCheckedAt: number
   signDate: number
   publishDate: number
   createdAt: number
@@ -93,6 +102,9 @@ export type UnilateralRefusalMinAggregateInputType = {
   inn?: true
   fullName?: true
   dataParsing?: true
+  supplierPhone?: true
+  supplierEmail?: true
+  supplierContactsCheckedAt?: true
   signDate?: true
   publishDate?: true
   createdAt?: true
@@ -107,6 +119,9 @@ export type UnilateralRefusalMaxAggregateInputType = {
   inn?: true
   fullName?: true
   dataParsing?: true
+  supplierPhone?: true
+  supplierEmail?: true
+  supplierContactsCheckedAt?: true
   signDate?: true
   publishDate?: true
   createdAt?: true
@@ -121,6 +136,9 @@ export type UnilateralRefusalCountAggregateInputType = {
   inn?: true
   fullName?: true
   dataParsing?: true
+  supplierPhone?: true
+  supplierEmail?: true
+  supplierContactsCheckedAt?: true
   signDate?: true
   publishDate?: true
   createdAt?: true
@@ -222,6 +240,9 @@ export type UnilateralRefusalGroupByOutputType = {
   inn: string | null
   fullName: string | null
   dataParsing: string | null
+  supplierPhone: string | null
+  supplierEmail: string | null
+  supplierContactsCheckedAt: Date | null
   signDate: Date | null
   publishDate: Date | null
   createdAt: Date
@@ -259,6 +280,9 @@ export type UnilateralRefusalWhereInput = {
   inn?: Prisma.StringNullableFilter<"UnilateralRefusal"> | string | null
   fullName?: Prisma.StringNullableFilter<"UnilateralRefusal"> | string | null
   dataParsing?: Prisma.StringNullableFilter<"UnilateralRefusal"> | string | null
+  supplierPhone?: Prisma.StringNullableFilter<"UnilateralRefusal"> | string | null
+  supplierEmail?: Prisma.StringNullableFilter<"UnilateralRefusal"> | string | null
+  supplierContactsCheckedAt?: Prisma.DateTimeNullableFilter<"UnilateralRefusal"> | Date | string | null
   signDate?: Prisma.DateTimeNullableFilter<"UnilateralRefusal"> | Date | string | null
   publishDate?: Prisma.DateTimeNullableFilter<"UnilateralRefusal"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"UnilateralRefusal"> | Date | string
@@ -275,6 +299,9 @@ export type UnilateralRefusalOrderByWithRelationInput = {
   inn?: Prisma.SortOrderInput | Prisma.SortOrder
   fullName?: Prisma.SortOrderInput | Prisma.SortOrder
   dataParsing?: Prisma.SortOrderInput | Prisma.SortOrder
+  supplierPhone?: Prisma.SortOrderInput | Prisma.SortOrder
+  supplierEmail?: Prisma.SortOrderInput | Prisma.SortOrder
+  supplierContactsCheckedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   signDate?: Prisma.SortOrderInput | Prisma.SortOrder
   publishDate?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -295,6 +322,9 @@ export type UnilateralRefusalWhereUniqueInput = Prisma.AtLeast<{
   inn?: Prisma.StringNullableFilter<"UnilateralRefusal"> | string | null
   fullName?: Prisma.StringNullableFilter<"UnilateralRefusal"> | string | null
   dataParsing?: Prisma.StringNullableFilter<"UnilateralRefusal"> | string | null
+  supplierPhone?: Prisma.StringNullableFilter<"UnilateralRefusal"> | string | null
+  supplierEmail?: Prisma.StringNullableFilter<"UnilateralRefusal"> | string | null
+  supplierContactsCheckedAt?: Prisma.DateTimeNullableFilter<"UnilateralRefusal"> | Date | string | null
   signDate?: Prisma.DateTimeNullableFilter<"UnilateralRefusal"> | Date | string | null
   publishDate?: Prisma.DateTimeNullableFilter<"UnilateralRefusal"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"UnilateralRefusal"> | Date | string
@@ -311,6 +341,9 @@ export type UnilateralRefusalOrderByWithAggregationInput = {
   inn?: Prisma.SortOrderInput | Prisma.SortOrder
   fullName?: Prisma.SortOrderInput | Prisma.SortOrder
   dataParsing?: Prisma.SortOrderInput | Prisma.SortOrder
+  supplierPhone?: Prisma.SortOrderInput | Prisma.SortOrder
+  supplierEmail?: Prisma.SortOrderInput | Prisma.SortOrder
+  supplierContactsCheckedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   signDate?: Prisma.SortOrderInput | Prisma.SortOrder
   publishDate?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -333,6 +366,9 @@ export type UnilateralRefusalScalarWhereWithAggregatesInput = {
   inn?: Prisma.StringNullableWithAggregatesFilter<"UnilateralRefusal"> | string | null
   fullName?: Prisma.StringNullableWithAggregatesFilter<"UnilateralRefusal"> | string | null
   dataParsing?: Prisma.StringNullableWithAggregatesFilter<"UnilateralRefusal"> | string | null
+  supplierPhone?: Prisma.StringNullableWithAggregatesFilter<"UnilateralRefusal"> | string | null
+  supplierEmail?: Prisma.StringNullableWithAggregatesFilter<"UnilateralRefusal"> | string | null
+  supplierContactsCheckedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"UnilateralRefusal"> | Date | string | null
   signDate?: Prisma.DateTimeNullableWithAggregatesFilter<"UnilateralRefusal"> | Date | string | null
   publishDate?: Prisma.DateTimeNullableWithAggregatesFilter<"UnilateralRefusal"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"UnilateralRefusal"> | Date | string
@@ -346,6 +382,9 @@ export type UnilateralRefusalCreateInput = {
   inn?: string | null
   fullName?: string | null
   dataParsing?: string | null
+  supplierPhone?: string | null
+  supplierEmail?: string | null
+  supplierContactsCheckedAt?: Date | string | null
   signDate?: Date | string | null
   publishDate?: Date | string | null
   createdAt?: Date | string
@@ -362,6 +401,9 @@ export type UnilateralRefusalUncheckedCreateInput = {
   inn?: string | null
   fullName?: string | null
   dataParsing?: string | null
+  supplierPhone?: string | null
+  supplierEmail?: string | null
+  supplierContactsCheckedAt?: Date | string | null
   signDate?: Date | string | null
   publishDate?: Date | string | null
   createdAt?: Date | string
@@ -377,6 +419,9 @@ export type UnilateralRefusalUpdateInput = {
   inn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dataParsing?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierContactsCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   signDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -393,6 +438,9 @@ export type UnilateralRefusalUncheckedUpdateInput = {
   inn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dataParsing?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierContactsCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   signDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -409,6 +457,9 @@ export type UnilateralRefusalCreateManyInput = {
   inn?: string | null
   fullName?: string | null
   dataParsing?: string | null
+  supplierPhone?: string | null
+  supplierEmail?: string | null
+  supplierContactsCheckedAt?: Date | string | null
   signDate?: Date | string | null
   publishDate?: Date | string | null
   createdAt?: Date | string
@@ -422,6 +473,9 @@ export type UnilateralRefusalUpdateManyMutationInput = {
   inn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dataParsing?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierContactsCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   signDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -436,6 +490,9 @@ export type UnilateralRefusalUncheckedUpdateManyInput = {
   inn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dataParsing?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierContactsCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   signDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -455,6 +512,9 @@ export type UnilateralRefusalCountOrderByAggregateInput = {
   inn?: Prisma.SortOrder
   fullName?: Prisma.SortOrder
   dataParsing?: Prisma.SortOrder
+  supplierPhone?: Prisma.SortOrder
+  supplierEmail?: Prisma.SortOrder
+  supplierContactsCheckedAt?: Prisma.SortOrder
   signDate?: Prisma.SortOrder
   publishDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -473,6 +533,9 @@ export type UnilateralRefusalMaxOrderByAggregateInput = {
   inn?: Prisma.SortOrder
   fullName?: Prisma.SortOrder
   dataParsing?: Prisma.SortOrder
+  supplierPhone?: Prisma.SortOrder
+  supplierEmail?: Prisma.SortOrder
+  supplierContactsCheckedAt?: Prisma.SortOrder
   signDate?: Prisma.SortOrder
   publishDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -487,6 +550,9 @@ export type UnilateralRefusalMinOrderByAggregateInput = {
   inn?: Prisma.SortOrder
   fullName?: Prisma.SortOrder
   dataParsing?: Prisma.SortOrder
+  supplierPhone?: Prisma.SortOrder
+  supplierEmail?: Prisma.SortOrder
+  supplierContactsCheckedAt?: Prisma.SortOrder
   signDate?: Prisma.SortOrder
   publishDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -565,6 +631,9 @@ export type UnilateralRefusalCreateWithoutAttachmentsInput = {
   inn?: string | null
   fullName?: string | null
   dataParsing?: string | null
+  supplierPhone?: string | null
+  supplierEmail?: string | null
+  supplierContactsCheckedAt?: Date | string | null
   signDate?: Date | string | null
   publishDate?: Date | string | null
   createdAt?: Date | string
@@ -580,6 +649,9 @@ export type UnilateralRefusalUncheckedCreateWithoutAttachmentsInput = {
   inn?: string | null
   fullName?: string | null
   dataParsing?: string | null
+  supplierPhone?: string | null
+  supplierEmail?: string | null
+  supplierContactsCheckedAt?: Date | string | null
   signDate?: Date | string | null
   publishDate?: Date | string | null
   createdAt?: Date | string
@@ -610,6 +682,9 @@ export type UnilateralRefusalUpdateWithoutAttachmentsInput = {
   inn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dataParsing?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierContactsCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   signDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -625,6 +700,9 @@ export type UnilateralRefusalUncheckedUpdateWithoutAttachmentsInput = {
   inn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dataParsing?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierContactsCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   signDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -639,6 +717,9 @@ export type UnilateralRefusalCreateWithoutCommentInput = {
   inn?: string | null
   fullName?: string | null
   dataParsing?: string | null
+  supplierPhone?: string | null
+  supplierEmail?: string | null
+  supplierContactsCheckedAt?: Date | string | null
   signDate?: Date | string | null
   publishDate?: Date | string | null
   createdAt?: Date | string
@@ -654,6 +735,9 @@ export type UnilateralRefusalUncheckedCreateWithoutCommentInput = {
   inn?: string | null
   fullName?: string | null
   dataParsing?: string | null
+  supplierPhone?: string | null
+  supplierEmail?: string | null
+  supplierContactsCheckedAt?: Date | string | null
   signDate?: Date | string | null
   publishDate?: Date | string | null
   createdAt?: Date | string
@@ -684,6 +768,9 @@ export type UnilateralRefusalUpdateWithoutCommentInput = {
   inn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dataParsing?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierContactsCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   signDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -699,6 +786,9 @@ export type UnilateralRefusalUncheckedUpdateWithoutCommentInput = {
   inn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dataParsing?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierContactsCheckedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   signDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -754,6 +844,9 @@ export type UnilateralRefusalSelect<ExtArgs extends runtime.Types.Extensions.Int
   inn?: boolean
   fullName?: boolean
   dataParsing?: boolean
+  supplierPhone?: boolean
+  supplierEmail?: boolean
+  supplierContactsCheckedAt?: boolean
   signDate?: boolean
   publishDate?: boolean
   createdAt?: boolean
@@ -771,6 +864,9 @@ export type UnilateralRefusalSelectCreateManyAndReturn<ExtArgs extends runtime.T
   inn?: boolean
   fullName?: boolean
   dataParsing?: boolean
+  supplierPhone?: boolean
+  supplierEmail?: boolean
+  supplierContactsCheckedAt?: boolean
   signDate?: boolean
   publishDate?: boolean
   createdAt?: boolean
@@ -785,6 +881,9 @@ export type UnilateralRefusalSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   inn?: boolean
   fullName?: boolean
   dataParsing?: boolean
+  supplierPhone?: boolean
+  supplierEmail?: boolean
+  supplierContactsCheckedAt?: boolean
   signDate?: boolean
   publishDate?: boolean
   createdAt?: boolean
@@ -799,6 +898,9 @@ export type UnilateralRefusalSelectScalar = {
   inn?: boolean
   fullName?: boolean
   dataParsing?: boolean
+  supplierPhone?: boolean
+  supplierEmail?: boolean
+  supplierContactsCheckedAt?: boolean
   signDate?: boolean
   publishDate?: boolean
   createdAt?: boolean
@@ -806,7 +908,7 @@ export type UnilateralRefusalSelectScalar = {
   status?: boolean
 }
 
-export type UnilateralRefusalOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "regNumber" | "region" | "inn" | "fullName" | "dataParsing" | "signDate" | "publishDate" | "createdAt" | "updatedAt" | "status", ExtArgs["result"]["unilateralRefusal"]>
+export type UnilateralRefusalOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "regNumber" | "region" | "inn" | "fullName" | "dataParsing" | "supplierPhone" | "supplierEmail" | "supplierContactsCheckedAt" | "signDate" | "publishDate" | "createdAt" | "updatedAt" | "status", ExtArgs["result"]["unilateralRefusal"]>
 export type UnilateralRefusalInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   attachments?: boolean | Prisma.UnilateralRefusal$attachmentsArgs<ExtArgs>
   comment?: boolean | Prisma.UnilateralRefusal$commentArgs<ExtArgs>
@@ -828,6 +930,9 @@ export type $UnilateralRefusalPayload<ExtArgs extends runtime.Types.Extensions.I
     inn: string | null
     fullName: string | null
     dataParsing: string | null
+    supplierPhone: string | null
+    supplierEmail: string | null
+    supplierContactsCheckedAt: Date | null
     signDate: Date | null
     publishDate: Date | null
     createdAt: Date
@@ -1264,6 +1369,9 @@ export interface UnilateralRefusalFieldRefs {
   readonly inn: Prisma.FieldRef<"UnilateralRefusal", 'String'>
   readonly fullName: Prisma.FieldRef<"UnilateralRefusal", 'String'>
   readonly dataParsing: Prisma.FieldRef<"UnilateralRefusal", 'String'>
+  readonly supplierPhone: Prisma.FieldRef<"UnilateralRefusal", 'String'>
+  readonly supplierEmail: Prisma.FieldRef<"UnilateralRefusal", 'String'>
+  readonly supplierContactsCheckedAt: Prisma.FieldRef<"UnilateralRefusal", 'DateTime'>
   readonly signDate: Prisma.FieldRef<"UnilateralRefusal", 'DateTime'>
   readonly publishDate: Prisma.FieldRef<"UnilateralRefusal", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"UnilateralRefusal", 'DateTime'>

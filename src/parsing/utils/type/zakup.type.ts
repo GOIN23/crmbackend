@@ -7,6 +7,8 @@ export interface UnilateralRefusalData {
   regNumber: string;
   inn: string;
   fullName: string;
+  supplierPhone: string | null;
+  supplierEmail: string | null;
   region: string;
   signDate: string | null;
   publishDate: string | null;

@@ -6,10 +6,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import axios, { AxiosRequestConfig } from 'axios';
-import * as https from 'https';
-import { HttpsProxyAgent } from 'https-proxy-agent';
 import * as xml2js from 'xml2js';
 import * as AdmZip from 'adm-zip';
+import * as https from 'https';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 import { randomUUID } from 'crypto';
 import { PrismaService } from 'prisma/prisma.service';
 import { GetUnilateralRefusalsDto } from './dto/get-refusals.dto';
@@ -30,6 +30,8 @@ export class ZakupkiUnilateralRefusalService {
   private readonly logger = new Logger(ZakupkiUnilateralRefusalService.name);
   private readonly endpoint =
     'https://int.zakupki.gov.ru/eis-integration/services/getDocsIP';
+  private readonly contractCardUrl =
+    'https://zakupki.gov.ru/epz/contract/contractCard/common-info.html';
   private token: string;
   private readonly eisProxyUrl?: string;
   private readonly eisRejectUnauthorized: boolean;
@@ -85,10 +87,159 @@ export class ZakupkiUnilateralRefusalService {
     }
   }
 
+  private async fetchSupplierContacts(regNumber: string): Promise<{
+    supplierPhone: string | null;
+    supplierEmail: string | null;
+    checked: boolean;
+  }> {
+    if (!regNumber) {
+      return { supplierPhone: null, supplierEmail: null, checked: false };
+    }
+
+    try {
+      const response = await axios.get<string>(this.contractCardUrl, {
+        params: { reestrNumber: regNumber },
+        headers: {
+          'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        },
+        ...this.getEisRequestConfig(30000),
+        responseType: 'text',
+      });
+
+      return { ...this.extractSupplierContacts(response.data), checked: true };
+    } catch (error) {
+      this.logger.warn(
+        `Supplier contacts not loaded for ${regNumber}: ${error.message}`,
+      );
+      return { supplierPhone: null, supplierEmail: null, checked: false };
+    }
+  }
+
+  private extractSupplierContacts(html: string): {
+    supplierPhone: string | null;
+    supplierEmail: string | null;
+  } {
+    const participantsMatch = html.match(
+      /<div\s+class\s*=\s*["'][^"']*participantsInnerHtml[^"']*["'][^>]*>([\s\S]*?)<input[^>]+id\s*=\s*["']participantsUrlRefresh["']/i,
+    );
+    const participantsHtml = participantsMatch?.[1] || html;
+    const tableHtml =
+      participantsHtml.match(/<table\b[^>]*>[\s\S]*?<\/table>/i)?.[0] ||
+      participantsHtml;
+
+    const headers = [...tableHtml.matchAll(/<th\b[^>]*>([\s\S]*?)<\/th>/gi)]
+      .map((match) => this.htmlToText(match[1]).toLowerCase())
+      .filter(Boolean);
+
+    const contactColumnIndex = headers.findIndex(
+      (header) => header.includes('телефон') && header.includes('почта'),
+    );
+
+    const phones = new Set<string>();
+    const emails = new Set<string>();
+
+    for (const rowMatch of tableHtml.matchAll(
+      /<tr\b[^>]*>([\s\S]*?)<\/tr>/gi,
+    )) {
+      const cells = [
+        ...rowMatch[1].matchAll(/<td\b[^>]*>([\s\S]*?)<\/td>/gi),
+      ].map((match) => match[1]);
+
+      if (!cells.length) continue;
+
+      const contactCell =
+        contactColumnIndex >= 0
+          ? cells[contactColumnIndex]
+          : cells.find((cell) => /@/.test(cell));
+
+      if (!contactCell) continue;
+
+      const contactText = this.htmlToText(contactCell);
+
+      for (const email of contactText.matchAll(
+        /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi,
+      )) {
+        emails.add(email[0].toLowerCase());
+      }
+
+      const textWithoutEmails = contactText.replace(
+        /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi,
+        ' ',
+      );
+
+      for (const phone of textWithoutEmails.matchAll(
+        /(?:\+?\d[\d\s().-]{5,}\d)/g,
+      )) {
+        const normalized = this.normalizePhone(phone[0]);
+        if (normalized) phones.add(normalized);
+      }
+    }
+
+    return {
+      supplierPhone: phones.size ? [...phones].join(', ') : null,
+      supplierEmail: emails.size ? [...emails].join(', ') : null,
+    };
+  }
+
+  private htmlToText(html: string): string {
+    return this.decodeHtmlEntities(
+      html
+        .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
+        .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<\/(p|div|td|th|tr|section)>/gi, '\n')
+        .replace(/<[^>]+>/g, ' '),
+    )
+      .replace(/[ \t\r\f\v]+/g, ' ')
+      .replace(/\n\s+/g, '\n')
+      .replace(/\n{2,}/g, '\n')
+      .trim();
+  }
+
+  private decodeHtmlEntities(value: string): string {
+    const namedEntities: Record<string, string> = {
+      amp: '&',
+      gt: '>',
+      lt: '<',
+      nbsp: ' ',
+      quot: '"',
+      apos: "'",
+    };
+
+    return value.replace(/&(#\d+|#x[\da-f]+|[a-z]+);/gi, (entity, code) => {
+      const key = code.toLowerCase();
+
+      if (key[0] === '#') {
+        const charCode =
+          key[1] === 'x'
+            ? parseInt(key.slice(2), 16)
+            : parseInt(key.slice(1), 10);
+        return Number.isFinite(charCode)
+          ? String.fromCharCode(charCode)
+          : entity;
+      }
+
+      return namedEntities[key] || entity;
+    });
+  }
+
+  private normalizePhone(phone: string): string | null {
+    const trimmed = phone.replace(/\s+/g, ' ').trim();
+    const digits = trimmed.replace(/\D/g, '');
+
+    if (digits.length < 7 || digits.length > 15) {
+      return null;
+    }
+
+    return trimmed;
+  }
+
   @Cron('0 0 */2 * * *') // Каждые 2 часа ( каждого четного часа)
   async hourlyUpdate() {
     this.logger.log('Starting update every 2 hours');
     await this.fetchAndSaveAllRegions();
+    await this.backfillMissingSupplierContacts();
     await this.invalidateAllRefusalsCache();
     this.logger.log('Update completed');
   }
@@ -181,6 +332,12 @@ export class ZakupkiUnilateralRefusalService {
               update: {
                 inn: item.inn,
                 fullName: item.fullName,
+                ...(item.supplierPhone || item.supplierEmail
+                  ? {
+                      supplierPhone: item.supplierPhone,
+                      supplierEmail: item.supplierEmail,
+                    }
+                  : {}),
                 signDate: item.signDate ? new Date(item.signDate) : null,
                 publishDate: item.publishDate
                   ? new Date(item.publishDate)
@@ -193,6 +350,8 @@ export class ZakupkiUnilateralRefusalService {
                 region: REGION_NAMES[item.region],
                 inn: item.inn,
                 fullName: item.fullName,
+                supplierPhone: item.supplierPhone,
+                supplierEmail: item.supplierEmail,
                 signDate: item.signDate ? new Date(item.signDate) : null,
                 publishDate: item.publishDate
                   ? new Date(item.publishDate)
@@ -213,6 +372,33 @@ export class ZakupkiUnilateralRefusalService {
                 })),
                 skipDuplicates: true,
               });
+            }
+
+            if (
+              item.regNumber &&
+              !savedRefusal.supplierPhone &&
+              !savedRefusal.supplierEmail &&
+              !savedRefusal.supplierContactsCheckedAt
+            ) {
+              const contacts = await this.fetchSupplierContacts(item.regNumber);
+
+              if (contacts.checked) {
+                await this.prisma.unilateralRefusal.update({
+                  where: { id: savedRefusal.id },
+                  data: {
+                    supplierPhone: contacts.supplierPhone,
+                    supplierEmail: contacts.supplierEmail,
+                    supplierContactsCheckedAt: new Date(),
+                  },
+                });
+              }
+
+              if (contacts.supplierPhone || contacts.supplierEmail) {
+                item.supplierPhone = contacts.supplierPhone;
+                item.supplierEmail = contacts.supplierEmail;
+              }
+
+              await new Promise((r) => setTimeout(r, 300));
             }
             saved.push(item);
           }
@@ -235,6 +421,57 @@ export class ZakupkiUnilateralRefusalService {
     }
 
     return saved;
+  }
+
+  async backfillMissingSupplierContacts(limit = 50) {
+    const items = await this.prisma.unilateralRefusal.findMany({
+      where: {
+        supplierPhone: null,
+        supplierEmail: null,
+        supplierContactsCheckedAt: null,
+      },
+      select: {
+        id: true,
+        regNumber: true,
+      },
+      orderBy: {
+        dataParsing: 'desc',
+      },
+      take: limit,
+    });
+
+    let checked = 0;
+    let filled = 0;
+
+    for (const item of items) {
+      const contacts = await this.fetchSupplierContacts(item.regNumber);
+
+      if (!contacts.checked) {
+        continue;
+      }
+
+      await this.prisma.unilateralRefusal.update({
+        where: { id: item.id },
+        data: {
+          supplierPhone: contacts.supplierPhone,
+          supplierEmail: contacts.supplierEmail,
+          supplierContactsCheckedAt: new Date(),
+        },
+      });
+
+      checked++;
+      if (contacts.supplierPhone || contacts.supplierEmail) {
+        filled++;
+      }
+
+      await new Promise((r) => setTimeout(r, 300));
+    }
+
+    this.logger.log(
+      `Supplier contacts backfill checked=${checked}, filled=${filled}`,
+    );
+
+    return { checked, filled };
   }
 
   private async getUnilateralRefusalsByRegion(params: {
@@ -390,6 +627,8 @@ export class ZakupkiUnilateralRefusalService {
                 regNumber: common.regNumber || null,
                 inn: legal.INN || person.INN || null,
                 fullName,
+                supplierPhone: null,
+                supplierEmail: null,
                 region,
                 signDate: common.signDT || null,
                 publishDate: common.docPublishDate || null,
@@ -564,6 +803,8 @@ export class ZakupkiUnilateralRefusalService {
         { regNumber: { contains: search, mode: 'insensitive' } },
         { fullName: { contains: search, mode: 'insensitive' } },
         { inn: { contains: search, mode: 'insensitive' } },
+        { supplierPhone: { contains: search, mode: 'insensitive' } },
+        { supplierEmail: { contains: search, mode: 'insensitive' } },
       ];
     }
 
@@ -601,6 +842,8 @@ export class ZakupkiUnilateralRefusalService {
           region: true,
           inn: true,
           fullName: true,
+          supplierPhone: true,
+          supplierEmail: true,
           signDate: true,
           publishDate: true,
           dataParsing: true,
