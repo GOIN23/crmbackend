@@ -9,6 +9,8 @@ COPY prisma ./prisma/
 COPY prisma.config.ts ./
 COPY . .
 
+ENV NODE_EXTRA_CA_CERTS=/app/certs/russian-trusted-root-ca.pem
+
 # Устанавливаем ВСЕ зависимости (и dev, и production)
 RUN yarn install --frozen-lockfile
 
